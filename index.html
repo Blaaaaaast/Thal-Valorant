@@ -111,7 +111,7 @@
         <div class="side-box">
             <h2>STEP 1. 뽑기 티어 & 선픽/후픽 추첨</h2>
             <button class="side-btn" id="mainDrawBtn" onclick="drawTierAndOrder()">🎲 랜덤 티어 / 선픽&후픽 뽑기</button>
-            <button class="side-btn reroll-btn" id="rerollBtn" onclick="reRollOnlyOrder()">🔄 선픽/후픽 다시 뽑기</button>
+            <button class="side-btn reroll-btn" id="rerollBtn" onclick="reRollOnlyOrder()">🔄 선픽/후픽 리롤</button>
             
             <div id="sideDrawResult" class="draw-box">추첨 대기 중...</div>
             <div id="reRollResultArea" class="draw-box reroll-box" style="display:none;"></div>
@@ -125,8 +125,8 @@
                         document.write(`
                             <div class="record-row">
                                 <span class="record-step">팀원${i}</span>
-                                <input type="text" id="record_T${i}_A" class="record-input" placeholder="${i===1?'팀장1':'팀원'}">
-                                <input type="text" id="record_T${i}_B" class="record-input" placeholder="${i===1?'팀장2':'팀원'}">
+                                <input type="text" id="record_T${i}_A" class="record-input" placeholder="${i===1?'선픽':'팀원'}">
+                                <input type="text" id="record_T${i}_B" class="record-input" placeholder="${i===1?'후픽':'팀원'}">
                             </div>
                         `);
                     }
@@ -202,7 +202,7 @@
         rerollDiv.style.display = 'block';
         rerollDiv.innerHTML = `
             <div class="reroll-tag">RE-ROLL</div>
-            <div class="draw-tier-title" style="color:#00ea96;">최종 재추첨 결과</div>
+            <div class="draw-tier-title" style="color:#00ea96;">선픽/후픽 리롤 결과!</div>
             <div class="pick-order-container">
                 <div class="pick-item"><span class="pick-label label-first">선픽</span><span class="pick-name">${shuffle[0]}</span></div>
                 <div class="pick-item"><span class="pick-label label-second">후픽</span><span class="pick-name">${shuffle[1]}</span></div>
