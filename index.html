@@ -12,7 +12,6 @@
         .sidebar { flex: 1; display: flex; flex-direction: column; gap: 20px; min-width: 420px; }
         .side-box { background: #16202a; padding: 22px; border-radius: 15px; border: 1px solid #2a3a4a; }
         
-        /* 저작권 문구 스타일 */
         .copyright-notice { 
             background: #ff4655; color: white; padding: 12px; border-radius: 8px; 
             font-size: 11px; font-weight: bold; line-height: 1.5; text-align: center; 
@@ -28,7 +27,10 @@
         .lock-btn { width: 55px; padding: 10px; border: 1px solid #444; border-radius: 5px; cursor: pointer; background: #2a3a4a; color: #888; font-size: 11px; }
         .lock-btn.locked { background: #ff4655; color: white; }
 
-        .draw-box { padding: 15px; background: #0f1923; border-radius: 8px; border: 2px solid #333; text-align: center; }
+        .draw-box { padding: 15px; background: #0f1923; border-radius: 8px; border: 2px solid #333; text-align: center; margin-bottom: 10px; }
+        .reroll-box { border-color: #00ea96; position: relative; } /* 재추첨 박스 강조 */
+        .reroll-tag { position: absolute; top: -10px; right: 10px; background: #00ea96; color: #0f1923; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        
         .draw-tier-title { color: #ff4655; font-size: 18px; font-weight: 900; margin-bottom: 10px; }
         .pick-order-container { display: flex; flex-direction: column; gap: 8px; align-items: center; }
         .pick-item { display: flex; align-items: center; gap: 10px; width: 100%; justify-content: center; }
@@ -41,7 +43,10 @@
         .record-step { font-size: 12px; color: #ff4655; width: 50px; font-weight: bold; flex-shrink: 0; }
         .record-input { flex: 1; padding: 8px 10px; border: none; border-radius: 4px; background: #ece8e1; color: #0f1923; font-weight: bold; font-size: 13px; text-align: center; }
 
-        .side-btn { background: #00ea96; color: #0f1923; width: 100%; border: none; padding: 14px; font-weight: 900; border-radius: 6px; cursor: pointer; margin-bottom: 12px; font-size: 15px; text-transform: uppercase; }
+        .side-btn { background: #00ea96; color: #0f1923; width: 100%; border: none; padding: 14px; font-weight: 900; border-radius: 6px; cursor: pointer; margin-bottom: 12px; font-size: 15px; text-transform: uppercase; transition: 0.2s; }
+        .side-btn:hover { opacity: 0.8; }
+        .reroll-btn { background: #ff4655; color: white; margin-top: 10px; display: none; }
+
         .manual-side-result { margin-top: 15px; padding: 15px; border-radius: 8px; font-weight: 900; text-align: center; font-size: 17px; display: none; }
         .atk-win { background: #ff4655; color: #ffffff !important; }
         .def-win { background: #00ea96; color: #0f1923 !important; }
@@ -66,7 +71,7 @@
 
 <div class="main-layout">
     <div class="container">
-        <h1>트할의 발로CK & 발로랜드</h1>
+        <h1>트할의 발로란트</h1>
         <div class="section">
             <h2>1. 플레이어 명단 (잠금/해제 클릭 시 묶밸)</h2>
             <div id="tierInputs">
@@ -89,7 +94,7 @@
             <div id="mapSelector" class="map-selector"></div>
         </div>
         <div class="action-btns">
-            <button class="main-btn pick-team-btn" onclick="generateTeams()">팀 및 공/수 자동 추첨</button>
+            <button class="main-btn pick-team-btn" onclick="generateTeams()">팀원 및 공/수 랜덤 추첨</button>
             <button class="main-btn pick-map-btn" onclick="pickMap()">맵 추첨</button>
         </div>
         <div class="result-wrapper">
@@ -105,25 +110,23 @@
 
         <div class="side-box">
             <h2>STEP 1. 뽑기 티어 & 선픽/후픽 추첨</h2>
-            <button class="side-btn" onclick="drawTierAndOrder()">🎲 랜덤 티어 / 선픽&후픽 뽑기</button>
+            <button class="side-btn" id="mainDrawBtn" onclick="drawTierAndOrder()">🎲 랜덤 티어 / 선픽&후픽 뽑기</button>
+            <button class="side-btn reroll-btn" id="rerollBtn" onclick="reRollOnlyOrder()">🔄 선픽/후픽 다시 뽑기</button>
+            
             <div id="sideDrawResult" class="draw-box">추첨 대기 중...</div>
+            <div id="reRollResultArea" class="draw-box reroll-box" style="display:none;"></div>
         </div>
 
         <div class="side-box">
             <h2>STEP 2. 드래프트</h2>
             <div id="draftRecordArea">
-                <div class="record-row">
-                    <span class="record-step">팀원 1</span>
-                    <input type="text" id="record_T1_A" class="record-input" placeholder="선픽">
-                    <input type="text" id="record_T1_B" class="record-input" placeholder="후픽">
-                </div>
                 <script>
-                    for(let i=2; i<=5; i++) {
+                    for(let i=1; i<=5; i++) {
                         document.write(`
                             <div class="record-row">
-                                <span class="record-step">팀원 ${i}</span>
-                                <input type="text" class="record-input" placeholder="A팀">
-                                <input type="text" class="record-input" placeholder="B팀">
+                                <span class="record-step">팀원${i}</span>
+                                <input type="text" id="record_T${i}_A" class="record-input" placeholder="${i===1?'팀장1':'팀원'}">
+                                <input type="text" id="record_T${i}_B" class="record-input" placeholder="${i===1?'팀장2':'팀원'}">
                             </div>
                         `);
                     }
@@ -134,10 +137,10 @@
         <div class="side-box">
             <h2>STEP 3. 공/수 추첨</h2>
             <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-                <input type="text" id="manualP1" class="side-input" placeholder="팀원 1">
-                <input type="text" id="manualP2" class="side-input" placeholder="팀원 2">
+                <input type="text" id="manualP1" class="side-input" placeholder="팀장 1">
+                <input type="text" id="manualP2" class="side-input" placeholder="팀장 2">
             </div>
-            <button class="side-btn" style="background: #ece8e1;" onclick="pickSideManual()">💥 공/수 정하기</button>
+            <button class="side-btn" style="background: #ece8e1;" onclick="pickSideManual()">💥 공/수 뽑기</button>
             <div id="manualSideResult" class="manual-side-result"></div>
         </div>
     </div>
@@ -146,6 +149,7 @@
 <script>
     const allMaps = ["어비스", "로터스", "바인드", "아이스박스", "선셋", "헤이븐", "어센트", "프랙처", "펄", "브리즈", "스플릿", "코로드"];
     let activeMaps = [...allMaps];
+    let currentSelectedTierData = null;
 
     function initMapSelector() {
         const selector = document.getElementById('mapSelector');
@@ -167,7 +171,12 @@
         }
         if (tiers.length === 0) return alert("왼쪽 명단에 이름을 입력해주세요!");
         
-        const sel = tiers[Math.floor(Math.random() * tiers.length)];
+        currentSelectedTierData = tiers[Math.floor(Math.random() * tiers.length)];
+        
+        // 메인 결과창 초기화 및 재추첨창 숨기기
+        document.getElementById('reRollResultArea').style.display = 'none';
+        
+        const sel = currentSelectedTierData;
         const shuffle = [sel.p1, sel.p2].sort(() => Math.random() - 0.5);
         
         const resultDiv = document.getElementById('sideDrawResult');
@@ -179,10 +188,36 @@
             </div>
         `;
 
-        document.getElementById('record_T1_A').value = shuffle[0];
-        document.getElementById('record_T1_B').value = shuffle[1];
-        document.getElementById('manualP1').value = shuffle[0];
-        document.getElementById('manualP2').value = shuffle[1];
+        updateDraftInputs(shuffle[0], shuffle[1]);
+        document.getElementById('rerollBtn').style.display = 'block';
+    }
+
+    function reRollOnlyOrder() {
+        if (!currentSelectedTierData) return;
+        
+        const sel = currentSelectedTierData;
+        const shuffle = [sel.p1, sel.p2].sort(() => Math.random() - 0.5);
+        
+        const rerollDiv = document.getElementById('reRollResultArea');
+        rerollDiv.style.display = 'block';
+        rerollDiv.innerHTML = `
+            <div class="reroll-tag">RE-ROLL</div>
+            <div class="draw-tier-title" style="color:#00ea96;">최종 재추첨 결과</div>
+            <div class="pick-order-container">
+                <div class="pick-item"><span class="pick-label label-first">선픽</span><span class="pick-name">${shuffle[0]}</span></div>
+                <div class="pick-item"><span class="pick-label label-second">후픽</span><span class="pick-name">${shuffle[1]}</span></div>
+            </div>
+        `;
+
+        updateDraftInputs(shuffle[0], shuffle[1]);
+    }
+
+    // 입력창 자동 업데이트 공통 함수
+    function updateDraftInputs(p1, p2) {
+        document.getElementById('record_T1_A').value = p1;
+        document.getElementById('record_T1_B').value = p2;
+        document.getElementById('manualP1').value = p1;
+        document.getElementById('manualP2').value = p2;
     }
 
     function pickSideManual() {
