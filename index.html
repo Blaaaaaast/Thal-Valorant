@@ -91,6 +91,13 @@
         .res-text { font-size: 12px; font-weight: bold; color: #ece8e1; }
         .mix-btn { background: #ece8e1; color: #0f1923; border: none; width: 100%; padding: 6px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; }
 
+        /* [추가] 통합 랜덤 버튼 스타일 */
+        .all-mix-btn { background: #3498db; color: white; border: none; width: 100%; padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12px; margin-top: 10px; }
+        .dual-mix-btn { background: #f1c40f; color: #0f1923; border: none; width: 100%; padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12px; margin-top: 8px; }
+        
+        /* [추가] 5라운드 전용 버튼 스타일 */
+        .five-round-btn { background: #9b59b6; color: white; border: none; width: 100%; padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12px; margin-top: 8px; }
+
         /* [수정] 중앙 컨테이너 크기 축소 */
         .container { flex: 1.2; background: #1f2933; padding: 20px; border-radius: 15px; border-top: 5px solid #ff4655; box-shadow: 0 10px 30px rgba(0,0,0,0.5); height: fit-content; }
         
@@ -186,6 +193,17 @@
         .modal-pos-item { background: #2a3a4a; padding: 5px 10px; border-radius: 5px; font-size: 12px; border-bottom: 2px solid #00ea96; display: flex; flex-direction: column; align-items: center; min-width: 60px; }
         .modal-pos-label { color: #888; font-size: 10px; margin-bottom: 2px; }
         .modal-pos-value { color: #00ea96; font-weight: bold; }
+
+        /* [추가] 5라운드 결과 테이블 스타일 */
+        .round-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        .round-table th, .round-table td { border: 1px solid #333; padding: 8px; text-align: center; }
+        .round-table th { background: #2a3a4a; color: #00ea96; }
+        .round-table td { color: #ece8e1; }
+        .round-num { font-weight: bold; color: #ff4655; width: 40px; }
+
+        /* [추가] 복사하기 버튼 스타일 */
+        .copy-btn { background: #00ea96; color: #0f1923; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 15px; width: 100%; transition: 0.2s; }
+        .copy-btn:hover { background: #00cc82; }
     </style>
 </head>
 <body>
@@ -196,7 +214,8 @@
 <button class="pos-toggle-btn" id="posToggleBtn" onclick="togglePosMixer()">랜덤 포지션 On/Off</button>
 
 <div class="pos-floating-panel" id="posMixer">
-    <h2 style="border:none; padding:0; text-align:center; font-size:16px; margin-bottom:15px; color:#00ea96;">Position Mixer</h2>
+    <h2 style="border:none; padding:0; text-align:center; font-size:16px; margin-bottom:5px; color:#00ea96;">랜덤 포지션</h2>
+    <div style="text-align:center; font-size:11px; color:#7e8c9a; margin-bottom:15px; font-weight:bold;">(포지션 클릭시 활성/비활성화)</div>
     <script>
         const posNames = ["엔트리", "연막", "감시자", "척후대", "플렉스"];
         for(let i=1; i<=5; i++) {
@@ -206,12 +225,13 @@
                     <div class="tier-pos-pool" id="pool_${i}">
                         ${posNames.map(p => `<button class="pos-btn active" onclick="this.classList.toggle('active')">${p}</button>`).join('')}
                     </div>
-                    <div class="tier-pos-res-box"><span class="res-text" id="res_${i}">대기 중</span></div>
-                    <button class="mix-btn" onclick="mixPosition(${i})">랜덤 추첨</button>
+                    <div class="tier-pos-res-box" style="display:none;"><span class="res-text" id="res_${i}">대기 중</span></div>
                 </div>
             `);
         }
     </script>
+    <button class="all-mix-btn" onclick="mixAllAndShowPopup(1)">🎲 전체 포지션 (중복X)</button>
+    <button class="five-round-btn" onclick="openFiveRoundModal(1)">📅 5라운드 랜덤 포지션</button>
 </div>
 
 <div class="main-layout">
@@ -243,7 +263,6 @@
             <div id="mapResultArea" class="map-result-box">
                 <span style="color: #ece8e1; font-size: 12px; letter-spacing: 2px; font-weight: bold;">SELECTED MAP</span>
                 <span id="selectedMap">-</span>
-                <div id="modalPositions" class="modal-pos-container" style="display:none;"></div>
             </div>
         </div>
 
@@ -317,10 +336,28 @@
     </div>
 </div>
 
+<div id="allMixModal" class="modal-overlay" onclick="this.style.display='none'">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="close-modal-btn" onclick="document.getElementById('allMixModal').style.display='none'">&times;</button>
+        <div class="modal-header">RANDOM POSITIONS</div>
+        <div id="allMixContent" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;"></div>
+        <button class="copy-btn" id="copyAllMixBtn">📋 결과 복사하기</button>
+    </div>
+</div>
+
+<div id="fiveRoundModal" class="modal-overlay" onclick="this.style.display='none'">
+    <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 800px;">
+        <button class="close-modal-btn" onclick="document.getElementById('fiveRoundModal').style.display='none'">&times;</button>
+        <div class="modal-header" id="fiveRoundHeader">5 ROUND POSITIONS</div>
+        <div id="fiveRoundContent" style="overflow-x: auto;"></div>
+        <button class="copy-btn" id="copyFiveRoundBtn">📋 전체 결과 복사하기</button>
+    </div>
+</div>
+
 <div id="finalModal" class="modal-overlay" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <button class="close-modal-btn" onclick="closeModal()">&times;</button>
-        <div class="modal-header">MATCH</div>
+        <div class="modal-header">MATCH SUMMARY</div>
         <div style="background:#0f1923; padding:20px; border-radius:12px; text-align:center; margin-bottom:25px; border: 1px solid #333;">
             <span style="font-size:14px; color:#888; display:block; margin-bottom:5px;">MAP</span>
             <span id="modalMap" style="font-size:24px; font-weight:bold; color:#ece8e1;">?</span>
@@ -342,68 +379,140 @@
                 <ul id="modalListB" class="modal-player-list"></ul>
             </div>
         </div>
+        <button class="copy-btn" onclick="copyFinalSummaryText()">📋 최종 매치 정보 복사하기</button>
     </div>
 </div>
 
 <script>
-    // --- 포지션 믹서 기능 로직 ---
+    // --- 포지션 믹서 로직 ---
     function togglePosMixer() {
         const panel = document.getElementById('posMixer');
         const btn = document.getElementById('posToggleBtn');
         panel.classList.toggle('active');
-        if(panel.classList.contains('active')) {
-            btn.classList.add('on');
-        } else {
-            btn.classList.remove('on');
-        }
+        if(panel.classList.contains('active')) btn.classList.add('on');
+        else btn.classList.remove('on');
     }
 
-    function mixPosition(tier) {
-        const pool = document.getElementById(`pool_${tier}`);
-        const actives = pool.querySelectorAll('.pos-btn.active');
-        if(actives.length === 0) return alert("활성된 포지션이 없습니다.");
-        const rand = Math.floor(Math.random() * actives.length);
-        document.getElementById(`res_${tier}`).innerText = actives[rand].innerText;
-        document.getElementById(`res_${tier}`).style.color = "#00ea96";
+    function mixAllPositionsData(countPerTier) {
+        let results = {};
+        let usedPositions = [];
+        for(let i=1; i<=5; i++) {
+            const pool = Array.from(document.getElementById(`pool_${i}`).querySelectorAll('.pos-btn.active')).map(btn => btn.innerText);
+            if(pool.length < countPerTier) { alert(`티어 ${i}의 선택 가능한 포지션이 부족합니다.`); return null; }
+            let available = pool.filter(p => !usedPositions.includes(p));
+            if(available.length < countPerTier) available = pool;
+            available.sort(() => Math.random() - 0.5);
+            let selected = available.slice(0, countPerTier);
+            results[i] = selected.join(' / ');
+            if(countPerTier === 1) usedPositions.push(selected[0]);
+        }
+        return results;
+    }
+
+    function mixAllAndShowPopup(countPerTier) {
+        const data = mixAllPositionsData(countPerTier);
+        if(!data) return;
+
+        const content = document.getElementById('allMixContent');
+        let html = "";
+        let copyText = "[전체 포지션 랜덤 결과]\n";
+        for(let i=1; i<=5; i++) {
+            html += `<div style="display:flex; justify-content:space-between; padding:10px; background:#16202a; border-radius:5px; border-left:4px solid #3498db;">
+                        <span style="color:#888;">티어 ${i}</span>
+                        <span style="font-weight:bold; color:#3498db;">${data[i]}</span>
+                     </div>`;
+            copyText += `티어 ${i}: ${data[i]}\n`;
+            document.getElementById(`res_${i}`).innerText = data[i];
+        }
+        content.innerHTML = html;
+        
+        document.getElementById('copyAllMixBtn').onclick = () => {
+            navigator.clipboard.writeText(copyText).then(() => alert("포지션 결과가 복사되었습니다!"));
+        };
+        document.getElementById('allMixModal').style.display = "flex";
+    }
+
+    function openFiveRoundModal(countPerTier) {
+        const content = document.getElementById('fiveRoundContent');
+        const header = document.getElementById('fiveRoundHeader');
+        header.innerText = "5 ROUND RANDOM POSITIONS";
+        
+        let tableHtml = `<table class="round-table"><thead><tr><th>라운드</th>${[1,2,3,4,5].map(i=>`<th>티어 ${i}</th>`).join('')}</tr></thead><tbody>`;
+        let copyText = "[5라운드 랜덤 포지션 결과]\n";
+
+        for(let r=1; r<=5; r++) {
+            const roundRes = mixAllPositionsData(countPerTier);
+            if(!roundRes) return;
+            tableHtml += `<tr><td class="round-num">${r}R</td>${[1,2,3,4,5].map(i=>`<td>${roundRes[i]}</td>`).join('')}</tr>`;
+            copyText += `${r}라운드: 티어1(${roundRes[1]}), 티어2(${roundRes[2]}), 티어3(${roundRes[3]}), 티어4(${roundRes[4]}), 티어5(${roundRes[5]})\n`;
+        }
+        content.innerHTML = tableHtml + `</tbody></table>`;
+        
+        document.getElementById('copyFiveRoundBtn').onclick = () => {
+            navigator.clipboard.writeText(copyText).then(() => alert("5라운드 전체 결과가 복사되었습니다!"));
+        };
+        document.getElementById('fiveRoundModal').style.display = "flex";
     }
 
     function updatePopupPositions() {
         const popupPosArea = document.getElementById('popupPosArea');
         const posPanel = document.getElementById('posMixer');
-        if(!posPanel.classList.contains('active')) {
-            popupPosArea.innerHTML = "";
-            return;
+        const posToggleBtn = document.getElementById('posToggleBtn');
+        
+        // 버튼이 ON 상태일 때만 포지션 정보를 표시
+        if(!posToggleBtn.classList.contains('on')) { 
+            popupPosArea.innerHTML = ""; 
+            return; 
         }
+
         let html = "";
         for(let i=1; i<=5; i++) {
-            const resElement = document.getElementById(`res_${i}`);
-            const currentRes = resElement.innerText;
-            let displayValue = "";
-            if(currentRes !== "대기 중") {
-                displayValue = currentRes;
-            } else {
-                const pool = document.getElementById(`pool_${i}`);
-                const actives = pool.querySelectorAll('.pos-btn.active');
-                displayValue = actives.length > 0 ? Array.from(actives).map(btn => btn.innerText).join('/') : "없음";
+            const resText = document.getElementById(`res_${i}`).innerText;
+            let display = resText;
+            if(resText === "대기 중") {
+                const actives = Array.from(document.getElementById(`pool_${i}`).querySelectorAll('.pos-btn.active')).map(b=>b.innerText);
+                display = actives.length > 0 ? actives.join('/') : "없음";
             }
-            html += `<div class="modal-pos-item"><span class="modal-pos-label">티어 ${i}</span><span class="modal-pos-value">${displayValue}</span></div>`;
+            html += `<div class="modal-pos-item"><span class="modal-pos-label">티어 ${i}</span><span class="modal-pos-value">${display}</span></div>`;
         }
         popupPosArea.innerHTML = html;
     }
 
+    // --- 매치 결과 텍스트 복사 로직 ---
+    function copyFinalSummaryText() {
+        const map = document.getElementById('modalMap').innerText;
+        const teamA = document.getElementById('modalTeamA').innerText;
+        const sideA = document.getElementById('modalBadgeA').innerText;
+        const listA = Array.from(document.getElementById('modalListA').querySelectorAll('li')).map(li => li.innerText).join(', ');
+        
+        const teamB = document.getElementById('modalTeamB').innerText;
+        const sideB = document.getElementById('modalBadgeB').innerText;
+        const listB = Array.from(document.getElementById('modalListB').querySelectorAll('li')).map(li => li.innerText).join(', ');
+
+        let posText = "";
+        const posToggleBtn = document.getElementById('posToggleBtn');
+        if(posToggleBtn.classList.contains('on')) {
+            posText = "\n[티어별 포지션]\n";
+            for(let i=1; i<=5; i++) {
+                posText += `티어 ${i}: ${document.getElementById(`res_${i}`).innerText}\n`;
+            }
+        }
+
+        const text = `[발로란트 매치 정보]\n맵: ${map}\n\n${teamA} (${sideA}): ${listA}\n${teamB} (${sideB}): ${listB}${posText}`;
+        navigator.clipboard.writeText(text).then(() => alert("매치 정보가 클립보드에 복사되었습니다!"));
+    }
+
+    // --- 기존 기능 로직 ---
     const allMaps = ["어비스", "로터스", "바인드", "아이스박스", "선셋", "헤이븐", "어센트", "프랙처", "펄", "브리즈", "스플릿", "코로드"];
     let activeMaps = [...allMaps];
-    let currentTierData = null;
-    let lastGeneratedData = null;
-    let sideDrawResult = null;
+    let currentTierData = null, lastGeneratedData = null, sideDrawResult = null;
 
     function initMaps() {
-        const sel = document.getElementById('mapSelector');
-        sel.innerHTML = allMaps.map(m => `<div class="map-item active" onclick="toggleMap(this, '${m}')">${m}</div>`).join('');
+        document.getElementById('mapSelector').innerHTML = allMaps.map(m => `<div class="map-item active" onclick="toggleMap(this, '${m}')">${m}</div>`).join('');
     }
     function toggleMap(el, name) {
         el.classList.toggle('active');
-        if(el.classList.contains('active')) activeMaps.push(name);
+        if(el.classList.contains('active')) { if(!activeMaps.includes(name)) activeMaps.push(name); }
         else activeMaps = activeMaps.filter(m => m !== name);
     }
     function pickMap() {
@@ -412,29 +521,24 @@
         document.getElementById('mapResultArea').style.display = "block";
         document.getElementById('selectedMap').innerText = map;
     }
-    function applySideStyle(element, isAtk) {
-        element.innerText = isAtk ? "공격" : "수비";
-        element.style.background = isAtk ? "#ff4655" : "#00ea96";
-        element.style.color = isAtk ? "white" : "#0f1923";
+    function applySideStyle(el, isAtk) {
+        el.innerText = isAtk ? "공격" : "수비";
+        el.style.background = isAtk ? "#ff4655" : "#00ea96";
+        el.style.color = isAtk ? "white" : "#0f1923";
     }
     function generateTeams() {
-        let a = []; let b = [];
+        let a = [], b = [];
         for(let i=1; i<=5; i++) {
-            const p1 = document.getElementById(`p${i}_1`).value.trim();
-            const p2 = document.getElementById(`p${i}_2`).value.trim();
-            const lock = document.querySelector(`#row-${i} .lock-btn`).classList.contains('locked');
+            const p1 = document.getElementById(`p${i}_1`).value.trim(), p2 = document.getElementById(`p${i}_2`).value.trim();
             if(!p1 || !p2) return alert(i+"티어 멤버를 입력하세요.");
-            if(lock || Math.random() > 0.5) { a.push(p1); b.push(p2); }
+            if(document.querySelector(`#row-${i} .lock-btn`).classList.contains('locked') || Math.random() > 0.5) { a.push(p1); b.push(p2); }
             else { a.push(p2); b.push(p1); }
         }
         const isAAtk = Math.random() > 0.5;
         lastGeneratedData = { a, b, isAAtk };
-        const bA = document.getElementById('liveBadgeA');
-        const bB = document.getElementById('liveBadgeB');
-        bA.style.display = "inline-block";
-        bB.style.display = "inline-block";
-        applySideStyle(bA, isAAtk);
-        applySideStyle(bB, !isAAtk);
+        const bA = document.getElementById('liveBadgeA'), bB = document.getElementById('liveBadgeB');
+        bA.style.display = bB.style.display = "inline-block";
+        applySideStyle(bA, isAAtk); applySideStyle(bB, !isAAtk);
         document.getElementById('liveListA').innerHTML = a.map(n => `<div class="player-line">• ${n}</div>`).join('');
         document.getElementById('liveListB').innerHTML = b.map(n => `<div class="player-line">• ${n}</div>`).join('');
     }
@@ -442,75 +546,54 @@
         const map = document.getElementById('selectedMap').innerText;
         if(!lastGeneratedData || map === "-") return alert("팀원 추첨과 맵 추첨을 먼저 완료해주세요!");
         document.getElementById('modalMap').innerText = map;
-        document.getElementById('modalTeamA').innerText = "TEAM A";
-        document.getElementById('modalTeamB').innerText = "TEAM B";
+        document.getElementById('modalTeamA').innerText = "TEAM A"; document.getElementById('modalTeamB').innerText = "TEAM B";
         applySideStyle(document.getElementById('modalBadgeA'), lastGeneratedData.isAAtk);
         applySideStyle(document.getElementById('modalBadgeB'), !lastGeneratedData.isAAtk);
         document.getElementById('modalListA').innerHTML = lastGeneratedData.a.map(n => `<li>• ${n}</li>`).join('');
         document.getElementById('modalListB').innerHTML = lastGeneratedData.b.map(n => `<li>• ${n}</li>`).join('');
-        updatePopupPositions(); 
+        updatePopupPositions();
         document.getElementById('finalModal').style.display = "flex";
     }
     function drawTierAndOrder() {
         const tiers = [];
         for(let i=1; i<=5; i++){
-            const p1 = document.getElementById(`p${i}_1`).value;
-            const p2 = document.getElementById(`p${i}_2`).value;
+            const p1 = document.getElementById(`p${i}_1`).value, p2 = document.getElementById(`p${i}_2`).value;
             if(p1 && p2) tiers.push({i, p1, p2});
         }
         if(!tiers.length) return alert("명단을 입력하세요.");
         currentTierData = tiers[Math.floor(Math.random()*tiers.length)];
         document.getElementById('rerollBtn').style.display = "block";
-        document.getElementById('rerollResultArea').style.display = "none";
         const s = [currentTierData.p1, currentTierData.p2].sort(() => Math.random()-0.5);
         document.getElementById('sideDrawResult').innerHTML = `티어 ${currentTierData.i} 당첨!<br>선픽: <b>${s[0]}</b> / 후픽: <b>${s[1]}</b>`;
-        document.getElementById('rec_1_A').value = s[0];
-        document.getElementById('rec_1_B').value = s[1];
-        document.getElementById('leader1').value = s[0];
-        document.getElementById('leader2').value = s[1];
+        document.getElementById('rec_1_A').value = document.getElementById('leader1').value = s[0];
+        document.getElementById('rec_1_B').value = document.getElementById('leader2').value = s[1];
     }
     function reRollOrder() {
         if(!currentTierData) return;
         const s = [currentTierData.p1, currentTierData.p2].sort(() => Math.random()-0.5);
-        const area = document.getElementById('rerollResultArea');
-        area.style.display = "block";
+        document.getElementById('rerollResultArea').style.display = "block";
         document.getElementById('rerollContent').innerHTML = `리롤 결과! <br>선픽: ${s[0]} / 후픽: ${s[1]}`;
     }
     function pickSideOnly() {
-        const l1 = document.getElementById('leader1').value;
-        const l2 = document.getElementById('leader2').value;
+        const l1 = document.getElementById('leader1').value, l2 = document.getElementById('leader2').value;
         if(!l1 || !l2) return alert("팀장 명단이 비어있습니다.");
-        const isAtk = Math.random() > 0.5;
-        sideDrawResult = isAtk;
+        sideDrawResult = Math.random() > 0.5;
         const resBox = document.getElementById('sideOnlyResult');
         resBox.style.display = "block";
-        const text1 = isAtk ? `<span style="color:#ff4655; font-weight:900;">공격</span>` : `<span style="color:#00ea96; font-weight:900;">수비</span>`;
-        const text2 = !isAtk ? `<span style="color:#ff4655; font-weight:900;">공격</span>` : `<span style="color:#00ea96; font-weight:900;">수비</span>`;
-        resBox.innerHTML = `<b>${l1}</b>: ${text1} / <b>${l2}</b>: ${text2}`;
+        resBox.innerHTML = `<b>${l1}</b>: ${sideDrawResult?'공격':'수비'} / <b>${l2}</b>: ${!sideDrawResult?'공격':'수비'}`;
     }
     function manualSummary() {
-        const l1 = document.getElementById('leader1').value;
-        const l2 = document.getElementById('leader2').value;
+        const l1 = document.getElementById('leader1').value, l2 = document.getElementById('leader2').value;
         const map = document.getElementById('selectedMap').innerText;
-        if(!l1 || !l2 || map === "-") return alert("팀장 이름과 맵을 확인해주세요.");
-        if(sideDrawResult === null) return alert("공/수 랜덤 뽑기를 먼저 진행해주세요.");
-        document.getElementById('modalMap').innerText = map;
-        document.getElementById('modalTeamA').innerText = "TEAM " + l1;
-        document.getElementById('modalTeamB').innerText = "TEAM " + l2;
-        applySideStyle(document.getElementById('modalBadgeA'), sideDrawResult);
-        applySideStyle(document.getElementById('modalBadgeB'), !sideDrawResult);
-        let la = ""; let lb = "";
-        for(let i=1; i<=5; i++) {
-            la += `<li>• ${document.getElementById('rec_'+i+'_A').value || '?'}</li>`;
-            lb += `<li>• ${document.getElementById('rec_'+i+'_B').value || '?'}</li>`;
-        }
-        document.getElementById('modalListA').innerHTML = la;
-        document.getElementById('modalListB').innerHTML = lb;
-        updatePopupPositions(); 
-        document.getElementById('finalModal').style.display = "flex";
+        if(!l1 || !l2 || map === "-") return alert("맵 추첨과 팀장 정보가 필요합니다.");
+        const a = [], b = [];
+        for(let i=1; i<=5; i++){ a.push(document.getElementById(`rec_${i}_A`).value); b.push(document.getElementById(`rec_${i}_B`).value); }
+        lastGeneratedData = { a, b, isAAtk: sideDrawResult };
+        openFinalSummary();
     }
     function closeModal() { document.getElementById('finalModal').style.display = "none"; }
     initMaps();
 </script>
+
 </body>
 </html>
