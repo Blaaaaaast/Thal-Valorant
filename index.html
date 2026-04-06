@@ -27,44 +27,47 @@
         .lock-btn { width: 55px; padding: 10px; border: 1px solid #444; border-radius: 5px; cursor: pointer; background: #2a3a4a; color: #888; font-size: 11px; }
         .lock-btn.locked { background: #ff4655; color: white; }
 
-        .draw-box { padding: 15px; background: #0f1923; border-radius: 8px; border: 2px solid #333; text-align: center; margin-bottom: 10px; }
-        .reroll-box { border-color: #00ea96; position: relative; } /* 재추첨 박스 강조 */
-        .reroll-tag { position: absolute; top: -10px; right: 10px; background: #00ea96; color: #0f1923; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-        
-        .draw-tier-title { color: #ff4655; font-size: 18px; font-weight: 900; margin-bottom: 10px; }
-        .pick-order-container { display: flex; flex-direction: column; gap: 8px; align-items: center; }
-        .pick-item { display: flex; align-items: center; gap: 10px; width: 100%; justify-content: center; }
-        .pick-label { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 900; text-transform: uppercase; min-width: 40px; }
-        .label-first { background: #00ea96; color: #0f1923; }
-        .label-second { background: #555; color: #ccc; }
-        .pick-name { font-size: 16px; font-weight: bold; color: white; }
-
-        .record-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; width: 100%; }
-        .record-step { font-size: 12px; color: #ff4655; width: 50px; font-weight: bold; flex-shrink: 0; }
-        .record-input { flex: 1; padding: 8px 10px; border: none; border-radius: 4px; background: #ece8e1; color: #0f1923; font-weight: bold; font-size: 13px; text-align: center; }
-
-        .side-btn { background: #00ea96; color: #0f1923; width: 100%; border: none; padding: 14px; font-weight: 900; border-radius: 6px; cursor: pointer; margin-bottom: 12px; font-size: 15px; text-transform: uppercase; transition: 0.2s; }
-        .side-btn:hover { opacity: 0.8; }
-        .reroll-btn { background: #ff4655; color: white; margin-top: 10px; display: none; }
-
-        .manual-side-result { margin-top: 15px; padding: 15px; border-radius: 8px; font-weight: 900; text-align: center; font-size: 17px; display: none; }
-        .atk-win { background: #ff4655; color: #ffffff !important; }
-        .def-win { background: #00ea96; color: #0f1923 !important; }
-
-        .map-selector { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+        .map-selector { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 15px; }
         .map-item { padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; background: #2a3a4a; color: #7e8c9a; }
         .map-item.active { background: #ece8e1; color: #0f1923; }
-        .main-btn { border: none; padding: 15px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 5px; width: 100%; margin-top: 10px; }
-        .pick-team-btn { background: #ff4655; color: white; }
-        .pick-map-btn { background: #ece8e1; color: #0f1923; }
 
-        .result-wrapper { display: flex; flex-direction: column; align-items: center; gap: 20px; margin-top: 25px; }
-        .map-result-box { width: 100%; background: linear-gradient(45deg, #ff4655, #ff7e87); color: white; padding: 20px; border-radius: 8px; font-size: 22px; font-weight: 900; display: none; text-align: center; }
-        .teams-container { display: flex; gap: 20px; justify-content: center; width: 100%; }
-        .result-card { background: #16202a; border: 2px solid #333; padding: 30px 20px 20px 20px; width: 45%; border-radius: 10px; position: relative; }
-        .side-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); padding: 5px 25px; border-radius: 20px; font-weight: 900; font-size: 14px; }
-        .side-atk { background: #ff4655; color: white; }
-        .side-def { background: #00ea96; color: #0f1923; }
+        .map-result-box { 
+            background: #0f1923; padding: 25px; border-radius: 12px; border: 3px solid #ff4655; 
+            text-align: center; margin-top: 15px; display: none; 
+            box-shadow: 0 0 20px rgba(255, 70, 85, 0.4);
+        }
+        #selectedMap { color: #ff4655; font-size: 32px; font-weight: 900; display: block; margin-top: 10px; }
+
+        .live-result-container { display: flex; flex-direction: row; gap: 15px; margin-bottom: 15px; width: 100%; }
+        .live-card { flex: 1; background: #16202a; padding: 15px; border-radius: 10px; border: 1px solid #2a3a4a; min-height: 180px; }
+        .live-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 8px; margin-bottom: 10px; }
+        .live-badge { padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 900; }
+        .player-line { font-size: 14px; padding: 5px 0; border-bottom: 1px solid #1f2933; color: #ece8e1; }
+
+        .main-btn { border: none; padding: 15px; font-size: 15px; font-weight: bold; cursor: pointer; border-radius: 5px; width: 100%; margin-top: 10px; transition: 0.2s; }
+        .pick-team-btn { background: #ff4655; color: white; margin-bottom: 10px; }
+        .pick-map-btn { background: #00ea96; color: #0f1923; font-size: 18px; }
+        .summary-btn { background: #ece8e1; color: #0f1923; margin-top: 10px; font-size: 16px; text-transform: uppercase; border: 2px solid #0f1923; }
+        
+        .side-btn { background: #00ea96; color: #0f1923; width: 100%; border: none; padding: 12px; font-weight: 900; border-radius: 6px; cursor: pointer; margin-bottom: 10px; font-size: 14px; }
+        
+        .draw-box { padding: 12px; background: #0f1923; border-radius: 8px; border: 2px solid #ff4655; text-align: center; margin-bottom: 10px; font-size: 14px; }
+        .reroll-box { border: 2px solid #00ea96; background: #0a1219; position: relative; display: none; }
+        .reroll-label { position: absolute; top: -10px; right: 10px; background: #00ea96; color: #0f1923; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+
+        #sideOnlyResult { border: 2px solid #00ea96; }
+
+        /* 드래프트 라벨 스타일 */
+        .draft-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+        .draft-label { width: 50px; font-size: 12px; font-weight: bold; color: #888; text-align: left; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: #1f2933; width: 90%; max-width: 600px; padding: 30px; border-radius: 20px; border: 3px solid #ff4655; position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
+        .modal-header { font-size: 28px; font-weight: 900; color: #ff4655; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 10px; letter-spacing: 2px; }
+        .modal-player-list { list-style: none; padding: 0; margin: 0; }
+        .modal-player-list li { font-size: 18px; font-weight: bold; color: #ece8e1; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .modal-badge { padding: 6px 15px; border-radius: 5px; font-size: 16px; font-weight: 900; text-transform: uppercase; }
+        .close-modal-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; color: white; font-size: 30px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -72,6 +75,7 @@
 <div class="main-layout">
     <div class="container">
         <h1>트할의 발로란트</h1>
+        
         <div class="section">
             <h2>1. 플레이어 명단 (잠금/해제 클릭 시 묶밸)</h2>
             <div id="tierInputs">
@@ -89,44 +93,66 @@
                 </script>
             </div>
         </div>
-        <div class="section">
+
+        <div class="section" style="margin-top: 30px;">
             <h2>2. 맵 풀 설정 (맵 클릭 시 추첨 제외)</h2>
             <div id="mapSelector" class="map-selector"></div>
+            <button class="main-btn pick-map-btn" onclick="pickMap()">🗺️ 맵 랜덤 추첨하기</button>
+            <div id="mapResultArea" class="map-result-box">
+                <span style="color: #ece8e1; font-size: 14px; letter-spacing: 2px; font-weight: bold;">SELECTED MAP</span>
+                <span id="selectedMap">-</span>
+            </div>
         </div>
-        <div class="action-btns">
-            <button class="main-btn pick-team-btn" onclick="generateTeams()">팀원 및 공/수 랜덤 추첨</button>
-            <button class="main-btn pick-map-btn" onclick="pickMap()">맵 추첨</button>
-        </div>
-        <div class="result-wrapper">
-            <div id="mapResultArea" class="map-result-box">🗺️ 선택된 맵: <span id="selectedMap">-</span></div>
-            <div class="teams-container" id="teamsResultContainer"></div>
+
+        <div class="section" style="margin-top: 30px;">
+            <h2>3. 팀원 & 공/수 추첨</h2>
+            <div class="live-result-container">
+                <div class="live-card" style="border-top: 4px solid #ff4655;">
+                    <div class="live-header">
+                        <span style="font-weight:900; color:#ff4655;">TEAM A</span>
+                        <span id="liveBadgeA" class="live-badge" style="display:none;">-</span>
+                    </div>
+                    <div id="liveListA"></div>
+                </div>
+                <div class="live-card" style="border-top: 4px solid #00ea96;">
+                    <div class="live-header">
+                        <span style="font-weight:900; color:#00ea96;">TEAM B</span>
+                        <span id="liveBadgeB" class="live-badge" style="display:none;">-</span>
+                    </div>
+                    <div id="liveListB"></div>
+                </div>
+            </div>
+            <button class="main-btn pick-team-btn" onclick="generateTeams()">팀원 및 공/수 랜덤 추첨하기</button>
+            <button class="main-btn summary-btn" onclick="openFinalSummary()">💥 최종 추첨 결과 한눈에 보기 (팝업)</button>
         </div>
     </div>
 
     <div class="sidebar">
-        <div class="copyright-notice">
-            본 사이트의 저작권은 트할에게 있으며 트할의 허락시 자유롭게 사용 가능하며 무단 수정/배포 금지합니다
-        </div>
-
+        <div class="copyright-notice">저작권: 트할 (무단 수정 및 배포 금지)</div>
+        
         <div class="side-box">
             <h2>STEP 1. 뽑기 티어 & 선픽/후픽 추첨</h2>
-            <button class="side-btn" id="mainDrawBtn" onclick="drawTierAndOrder()">🎲 랜덤 티어 / 선픽&후픽 뽑기</button>
-            <button class="side-btn reroll-btn" id="rerollBtn" onclick="reRollOnlyOrder()">🔄 선픽/후픽 리롤</button>
+            <button class="side-btn" onclick="drawTierAndOrder()">🎲 랜덤 티어 & 선픽/후픽 뽑기</button>
+            <button class="side-btn" style="background:#ff4655; color:white; display:none;" id="rerollBtn" onclick="reRollOrder()">🔄 선픽/후픽 리롤하기</button>
             
             <div id="sideDrawResult" class="draw-box">추첨 대기 중...</div>
-            <div id="reRollResultArea" class="draw-box reroll-box" style="display:none;"></div>
+            <div id="rerollResultArea" class="draw-box reroll-box">
+                <div class="reroll-label">RE-ROLL</div>
+                <div id="rerollContent" style="color:#00ea96; font-weight:bold;"></div>
+            </div>
         </div>
 
         <div class="side-box">
             <h2>STEP 2. 드래프트</h2>
             <div id="draftRecordArea">
                 <script>
+                    const labels = ["팀장", "팀원 2", "팀원 3", "팀원 4", "팀원 5"];
                     for(let i=1; i<=5; i++) {
                         document.write(`
-                            <div class="record-row">
-                                <span class="record-step">팀원${i}</span>
-                                <input type="text" id="record_T${i}_A" class="record-input" placeholder="${i===1?'선픽':'팀원'}">
-                                <input type="text" id="record_T${i}_B" class="record-input" placeholder="${i===1?'후픽':'팀원'}">
+                            <div class="draft-row">
+                                <span class="draft-label">${labels[i-1]}</span>
+                                <input type="text" id="rec_${i}_A" class="side-input" style="padding:8px; font-size:12px;" placeholder="팀 A">
+                                <input type="text" id="rec_${i}_B" class="side-input" style="padding:8px; font-size:12px;" placeholder="팀 B">
                             </div>
                         `);
                     }
@@ -136,12 +162,44 @@
 
         <div class="side-box">
             <h2>STEP 3. 공/수 추첨</h2>
-            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-                <input type="text" id="manualP1" class="side-input" placeholder="팀장 1">
-                <input type="text" id="manualP2" class="side-input" placeholder="팀장 2">
+            <div style="display: flex; gap: 5px; margin-bottom: 10px;">
+                <input type="text" id="leader1" class="side-input" placeholder="팀장 1">
+                <input type="text" id="leader2" class="side-input" placeholder="팀장 2">
             </div>
-            <button class="side-btn" style="background: #ece8e1;" onclick="pickSideManual()">💥 공/수 뽑기</button>
-            <div id="manualSideResult" class="manual-side-result"></div>
+            <button class="side-btn" style="background: #ff4655; color: white;" onclick="pickSideOnly()">🎲 공/수 추첨하기</button>
+            <div id="sideOnlyResult" class="draw-box" style="display:none;"></div>
+
+            <div style="margin-top:15px; padding-top:15px; border-top:1px solid #333;">
+                <h2 style="border:none; padding:0; font-size:12px; margin-bottom:10px; color:#888;">최종 통합 결과 확인</h2>
+                <button class="side-btn" style="background: #ece8e1; color:#0f1923;" onclick="manualSummary()">💥최종 추첨 결과 한눈에 보기 (팝업)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="finalModal" class="modal-overlay" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="close-modal-btn" onclick="closeModal()">&times;</button>
+        <div class="modal-header">MATCH</div>
+        <div style="background:#0f1923; padding:20px; border-radius:12px; text-align:center; margin-bottom:25px; border: 1px solid #333;">
+            <span style="font-size:14px; color:#888; display:block; margin-bottom:5px;">MAP</span>
+            <span id="modalMap" style="font-size:24px; font-weight:bold; color:#ece8e1;">?</span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+            <div style="background:#16202a; padding:20px; border-radius:15px; border:1px solid #2a3a4a;">
+                <div style="display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:15px;">
+                    <b id="modalTeamA" style="font-size:18px; color:#ff4655;">TEAM A</b>
+                    <span id="modalBadgeA" class="modal-badge">-</span>
+                </div>
+                <ul id="modalListA" class="modal-player-list"></ul>
+            </div>
+            <div style="background:#16202a; padding:20px; border-radius:15px; border:1px solid #2a3a4a;">
+                <div style="display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:15px;">
+                    <b id="modalTeamB" style="font-size:18px; color:#00ea96;">TEAM B</b>
+                    <span id="modalBadgeB" class="modal-badge">-</span>
+                </div>
+                <ul id="modalListB" class="modal-player-list"></ul>
+            </div>
         </div>
     </div>
 </div>
@@ -149,112 +207,126 @@
 <script>
     const allMaps = ["어비스", "로터스", "바인드", "아이스박스", "선셋", "헤이븐", "어센트", "프랙처", "펄", "브리즈", "스플릿", "코로드"];
     let activeMaps = [...allMaps];
-    let currentSelectedTierData = null;
+    let currentTierData = null;
+    let lastGeneratedData = null;
+    let sideDrawResult = null;
 
-    function initMapSelector() {
-        const selector = document.getElementById('mapSelector');
-        selector.innerHTML = allMaps.map(map => `<div class="map-item active" onclick="toggleMap(this, '${map}')">${map}</div>`).join('');
+    function initMaps() {
+        const sel = document.getElementById('mapSelector');
+        sel.innerHTML = allMaps.map(m => `<div class="map-item active" onclick="toggleMap(this, '${m}')">${m}</div>`).join('');
     }
-
-    function toggleMap(element, mapName) {
-        element.classList.toggle('active');
-        if (element.classList.contains('active')) activeMaps.push(mapName);
-        else activeMaps = activeMaps.filter(m => m !== mapName);
+    function toggleMap(el, name) {
+        el.classList.toggle('active');
+        if(el.classList.contains('active')) activeMaps.push(name);
+        else activeMaps = activeMaps.filter(m => m !== name);
     }
-
-    function drawTierAndOrder() {
-        const tiers = [];
-        for (let i = 1; i <= 5; i++) {
-            const p1 = document.getElementById(`p${i}_1`).value.trim();
-            const p2 = document.getElementById(`p${i}_2`).value.trim();
-            if (p1 && p2) tiers.push({ index: i, p1, p2 });
-        }
-        if (tiers.length === 0) return alert("왼쪽 명단에 이름을 입력해주세요!");
-        
-        currentSelectedTierData = tiers[Math.floor(Math.random() * tiers.length)];
-        
-        // 메인 결과창 초기화 및 재추첨창 숨기기
-        document.getElementById('reRollResultArea').style.display = 'none';
-        
-        const sel = currentSelectedTierData;
-        const shuffle = [sel.p1, sel.p2].sort(() => Math.random() - 0.5);
-        
-        const resultDiv = document.getElementById('sideDrawResult');
-        resultDiv.innerHTML = `
-            <div class="draw-tier-title">티어 ${sel.index} 당첨!</div>
-            <div class="pick-order-container">
-                <div class="pick-item"><span class="pick-label label-first">선픽</span><span class="pick-name">${shuffle[0]}</span></div>
-                <div class="pick-item"><span class="pick-label label-second">후픽</span><span class="pick-name">${shuffle[1]}</span></div>
-            </div>
-        `;
-
-        updateDraftInputs(shuffle[0], shuffle[1]);
-        document.getElementById('rerollBtn').style.display = 'block';
+    function pickMap() {
+        if(!activeMaps.length) return alert("맵을 선택해주세요.");
+        const map = activeMaps[Math.floor(Math.random()*activeMaps.length)];
+        document.getElementById('mapResultArea').style.display = "block";
+        document.getElementById('selectedMap').innerText = map;
     }
-
-    function reRollOnlyOrder() {
-        if (!currentSelectedTierData) return;
-        
-        const sel = currentSelectedTierData;
-        const shuffle = [sel.p1, sel.p2].sort(() => Math.random() - 0.5);
-        
-        const rerollDiv = document.getElementById('reRollResultArea');
-        rerollDiv.style.display = 'block';
-        rerollDiv.innerHTML = `
-            <div class="reroll-tag">RE-ROLL</div>
-            <div class="draw-tier-title" style="color:#00ea96;">선픽/후픽 리롤 결과!</div>
-            <div class="pick-order-container">
-                <div class="pick-item"><span class="pick-label label-first">선픽</span><span class="pick-name">${shuffle[0]}</span></div>
-                <div class="pick-item"><span class="pick-label label-second">후픽</span><span class="pick-name">${shuffle[1]}</span></div>
-            </div>
-        `;
-
-        updateDraftInputs(shuffle[0], shuffle[1]);
+    function applySideStyle(element, isAtk) {
+        element.innerText = isAtk ? "공격" : "수비";
+        element.style.background = isAtk ? "#ff4655" : "#00ea96";
+        element.style.color = isAtk ? "white" : "#0f1923";
     }
-
-    // 입력창 자동 업데이트 공통 함수
-    function updateDraftInputs(p1, p2) {
-        document.getElementById('record_T1_A').value = p1;
-        document.getElementById('record_T1_B').value = p2;
-        document.getElementById('manualP1').value = p1;
-        document.getElementById('manualP2').value = p2;
-    }
-
-    function pickSideManual() {
-        const p1 = document.getElementById('manualP1').value.trim();
-        const p2 = document.getElementById('manualP2').value.trim();
-        if (!p1 || !p2) return alert("이름을 입력해주세요!");
-        const resDiv = document.getElementById('manualSideResult');
-        const isP1Atk = Math.random() > 0.5;
-        resDiv.style.display = "block";
-        resDiv.className = "manual-side-result " + (isP1Atk ? "atk-win" : "def-win");
-        resDiv.innerHTML = isP1Atk ? `${p1}: 공격 / ${p2}: 수비` : `${p1}: 수비 / ${p2}: 공격`;
-    }
-
     function generateTeams() {
-        let teamA = []; let teamB = [];
-        for (let i = 1; i <= 5; i++) {
+        let a = []; let b = [];
+        for(let i=1; i<=5; i++) {
             const p1 = document.getElementById(`p${i}_1`).value.trim();
             const p2 = document.getElementById(`p${i}_2`).value.trim();
             const lock = document.querySelector(`#row-${i} .lock-btn`).classList.contains('locked');
-            if (!p1 || !p2) return alert(`티어 ${i}를 입력해주세요!`);
-            if (lock || Math.random() > 0.5) { teamA.push({name:p1, tier:i}); teamB.push({name:p2, tier:i}); }
-            else { teamA.push({name:p2, tier:i}); teamB.push({name:p1, tier:i}); }
+            if(!p1 || !p2) return alert(i+"티어 멤버를 입력하세요.");
+            if(lock || Math.random() > 0.5) { a.push(p1); b.push(p2); }
+            else { a.push(p2); b.push(p1); }
         }
         const isAAtk = Math.random() > 0.5;
-        const render = (p) => `<div style="padding:10px 0; border-bottom:1px solid #2a3a4a; font-size:15px; display:flex; justify-content:space-between;"><span>${p.name}</span><span style="font-size:11px;color:#666;">T${p.tier}</span></div>`;
-        document.getElementById('teamsResultContainer').innerHTML = `
-            <div class="result-card"><div class="side-badge ${isAAtk?'side-atk':'side-def'}">${isAAtk?'공 격':'수 비'}</div><h3>TEAM A</h3>${teamA.map(render).join('')}</div>
-            <div class="result-card"><div class="side-badge ${isAAtk?'side-def':'side-atk'}">${isAAtk?'수 비':'공 격'}</div><h3>TEAM B</h3>${teamB.map(render).join('')}</div>
-        `;
+        lastGeneratedData = { a, b, isAAtk };
+        const bA = document.getElementById('liveBadgeA');
+        const bB = document.getElementById('liveBadgeB');
+        bA.style.display = "inline-block";
+        bB.style.display = "inline-block";
+        applySideStyle(bA, isAAtk);
+        applySideStyle(bB, !isAAtk);
+        document.getElementById('liveListA').innerHTML = a.map(n => `<div class="player-line">• ${n}</div>`).join('');
+        document.getElementById('liveListB').innerHTML = b.map(n => `<div class="player-line">• ${n}</div>`).join('');
     }
-
-    function pickMap() {
-        if (activeMaps.length === 0) return alert("맵을 선택해주세요!");
-        document.getElementById('mapResultArea').style.display = "block";
-        document.getElementById('selectedMap').innerText = activeMaps[Math.floor(Math.random() * activeMaps.length)];
+    function openFinalSummary() {
+        const map = document.getElementById('selectedMap').innerText;
+        if(!lastGeneratedData || map === "-") return alert("팀원 추첨과 맵 추첨을 먼저 완료해주세요!");
+        document.getElementById('modalMap').innerText = map;
+        document.getElementById('modalTeamA').innerText = "TEAM A";
+        document.getElementById('modalTeamB').innerText = "TEAM B";
+        const bA = document.getElementById('modalBadgeA');
+        const bB = document.getElementById('modalBadgeB');
+        applySideStyle(bA, lastGeneratedData.isAAtk);
+        applySideStyle(bB, !lastGeneratedData.isAAtk);
+        document.getElementById('modalListA').innerHTML = lastGeneratedData.a.map(n => `<li>• ${n}</li>`).join('');
+        document.getElementById('modalListB').innerHTML = lastGeneratedData.b.map(n => `<li>• ${n}</li>`).join('');
+        document.getElementById('finalModal').style.display = "flex";
     }
-    initMapSelector();
+    function drawTierAndOrder() {
+        const tiers = [];
+        for(let i=1; i<=5; i++){
+            const p1 = document.getElementById(`p${i}_1`).value;
+            const p2 = document.getElementById(`p${i}_2`).value;
+            if(p1 && p2) tiers.push({i, p1, p2});
+        }
+        if(!tiers.length) return alert("명단을 입력하세요.");
+        currentTierData = tiers[Math.floor(Math.random()*tiers.length)];
+        document.getElementById('rerollBtn').style.display = "block";
+        document.getElementById('rerollResultArea').style.display = "none";
+        const s = [currentTierData.p1, currentTierData.p2].sort(() => Math.random()-0.5);
+        document.getElementById('sideDrawResult').innerHTML = `티어 ${currentTierData.i} 당첨!<br>선픽: <b>${s[0]}</b> / 후픽: <b>${s[1]}</b>`;
+        document.getElementById('rec_1_A').value = s[0];
+        document.getElementById('rec_1_B').value = s[1];
+        document.getElementById('leader1').value = s[0];
+        document.getElementById('leader2').value = s[1];
+    }
+    function reRollOrder() {
+        if(!currentTierData) return;
+        const s = [currentTierData.p1, currentTierData.p2].sort(() => Math.random()-0.5);
+        const area = document.getElementById('rerollResultArea');
+        area.style.display = "block";
+        document.getElementById('rerollContent').innerHTML = `리롤 결과! <br>선픽: ${s[0]} / 후픽: ${s[1]}`;
+    }
+    function pickSideOnly() {
+        const l1 = document.getElementById('leader1').value;
+        const l2 = document.getElementById('leader2').value;
+        if(!l1 || !l2) return alert("팀장 명단이 비어있습니다.");
+        const isAtk = Math.random() > 0.5;
+        sideDrawResult = isAtk;
+        const resBox = document.getElementById('sideOnlyResult');
+        resBox.style.display = "block";
+        const text1 = isAtk ? `<span style="color:#ff4655; font-weight:900;">공격</span>` : `<span style="color:#00ea96; font-weight:900;">수비</span>`;
+        const text2 = !isAtk ? `<span style="color:#ff4655; font-weight:900;">공격</span>` : `<span style="color:#00ea96; font-weight:900;">수비</span>`;
+        resBox.innerHTML = `<b>${l1}</b>: ${text1} / <b>${l2}</b>: ${text2}`;
+    }
+    function manualSummary() {
+        const l1 = document.getElementById('leader1').value;
+        const l2 = document.getElementById('leader2').value;
+        const map = document.getElementById('selectedMap').innerText;
+        if(!l1 || !l2 || map === "-") return alert("팀장 이름과 맵을 확인해주세요.");
+        if(sideDrawResult === null) return alert("공/수 랜덤 뽑기를 먼저 진행해주세요.");
+        document.getElementById('modalMap').innerText = map;
+        document.getElementById('modalTeamA').innerText = "TEAM " + l1;
+        document.getElementById('modalTeamB').innerText = "TEAM " + l2;
+        const bA = document.getElementById('modalBadgeA');
+        const bB = document.getElementById('modalBadgeB');
+        applySideStyle(bA, sideDrawResult);
+        applySideStyle(bB, !sideDrawResult);
+        let la = ""; let lb = "";
+        for(let i=1; i<=5; i++) {
+            la += `<li>• ${document.getElementById('rec_'+i+'_A').value || '?'}</li>`;
+            lb += `<li>• ${document.getElementById('rec_'+i+'_B').value || '?'}</li>`;
+        }
+        document.getElementById('modalListA').innerHTML = la;
+        document.getElementById('modalListB').innerHTML = lb;
+        document.getElementById('finalModal').style.display = "flex";
+    }
+    function closeModal() { document.getElementById('finalModal').style.display = "none"; }
+    initMaps();
 </script>
 </body>
 </html>
